@@ -11,8 +11,8 @@ async def wait_n(n: int, max_delay: int) -> List[float]:
         in ascending order without using sort() because of concurrency. """
     delay_list: List[float] = []
 
-    for i in range(n):
-        delay: float = await wait_random(max_delay)
-        delay_list.append(delay)
-    delay_list.sort()
+    delays: dict = {i: await wait_random(max_delay) for i in range(n)}
+    delay_list = [delay for _, delay in sorted(delays.items(),
+                                               key=lambda x: x[1])]
+
     return delay_list
