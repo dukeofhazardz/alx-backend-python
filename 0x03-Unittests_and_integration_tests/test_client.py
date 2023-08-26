@@ -52,4 +52,3 @@ class TestGithubOrgClient(unittest.TestCase):
             self.assertEqual(repos, expected_repos)
             self.assertTrue(google._public_repos_url)
             get_mock.assert_called_once_with(google._public_repos_url)
-
