@@ -25,9 +25,9 @@ for i in range(10):
 for i in range(10):
     print(test_memo)'''
 
-apple = GithubOrgClient('apple')
-print(apple.org)
-repo = apple.public_repos
+apple = GithubOrgClient('google')
+print(apple._public_repos_url)
 print(apple.public_repos)
-print(apple.has_license(repo, ))
+for repo in apple.public_repos('MIT'):
+    print(repo)
 #print(apple.repos_payload)
