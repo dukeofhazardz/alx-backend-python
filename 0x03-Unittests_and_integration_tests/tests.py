@@ -2,6 +2,7 @@
 
 from utils import memoize
 from client import GithubOrgClient
+from fixtures import TEST_PAYLOAD
 
 
 class TestClass:
@@ -24,10 +25,18 @@ for i in range(10):
     print(test.a_method())
 for i in range(10):
     print(test_memo)'''
-
+'''
 apple = GithubOrgClient('google')
 print(apple._public_repos_url)
 print(apple.public_repos)
 for repo in apple.public_repos('MIT'):
-    print(repo)
+    print(repo)'''
 #print(apple.repos_payload)
+
+count = 0
+for p in TEST_PAYLOAD:
+    for i in p:
+        count += 1
+        print(count)
+        print(type(i))
+    print(type(p))
