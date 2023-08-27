@@ -105,3 +105,19 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
             self.assertTrue(self.apache2_repos)
             self.assertEqual(apache_repos, self.apache2_repos)
             self.assertEqual(all_repos, self.expected_repos)
+    
+    def test_public_repos_with_license(self):
+        """ Tests the public_repos method with license """
+        mock_response = [
+            Mock(json=lambda: self.repos_payload)
+        ]
+        self.get_mock.side_effect = mock_response
+
+        with patch.object(GithubOrgClient, '_public_repos_url'):
+            google = GithubOrgClient("google")
+            apache_repos = google.public_repos(license="apache-2.0")
+
+            self.assertIsInstance(apache_repos, list)
+            self.assertTrue(self.apache2_repos)
+            self.assertTrue(apache_repos)
+            self.assertEqual(apache_repos, self.apache2_repos)
