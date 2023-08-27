@@ -80,7 +80,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
     @classmethod
     def setUp(cls):
         """ The setUp Class """
-        cls.get_patcher = patch('client.get_json')
+        cls.get_patcher = patch('utils.requests.get')
         cls.get_mock = cls.get_patcher.start()
 
     @classmethod
@@ -90,12 +90,18 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
 
     def test_public_repos(self):
         """ Tests the public_repos method """
-        self.get_mock.return_value.json.side_effect = [self.org_payload,
-                                                       self.repos_payload]
-        with patch.object(GithubOrgClient, '_public_repos_url',
-                          return_value=self.org_payload['repos_url']):
-            google = GithubOrgClient("google")
-            repos = google.public_repos(license="apache-2.0")
+        mock_response = [
+            Mock(json=lambda: self.repos_payload)
+        ]
+        self.get_mock.side_effect = mock_response
 
-            self.assertIsInstance(repos, list)
+        with patch.object(GithubOrgClient, '_public_repos_url'):
+            google = GithubOrgClient("google")
+            apache_repos = google.public_repos(license="apache-2.0")
+            all_repos = google.public_repos()
+
+            self.assertIsInstance(apache_repos, list)
+            self.assertIsInstance(all_repos, list)
             self.assertTrue(self.apache2_repos)
+            self.assertEqual(apache_repos, self.apache2_repos)
+            self.assertEqual(all_repos, self.expected_repos)
